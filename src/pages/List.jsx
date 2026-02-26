@@ -25,7 +25,7 @@ export default function List() {
           : [];
 
         setData(employees);
-        toast.success("Data Loaded 🚀");
+        toast.success("Data Loaded ");
       })
       .catch((err) => {
         console.error(err);
@@ -36,7 +36,7 @@ export default function List() {
 
   // Safe filter (avoid crash if name missing)
   const filtered = data.filter((item) =>
-    (item?.name || item?.employee_name || "")
+    (item[0] || item?.employee_name || "")
       .toLowerCase()
       .includes(search.toLowerCase())
   );
@@ -54,7 +54,7 @@ export default function List() {
       {/* Search + Chart/Map Buttons */}
       <div className="flex justify-between mb-4">
         <input
-          className="p-2 border rounded w-64"
+          className="text-white border-gray-300 p-2 border rounded-full focus:outline-none focus:ring-2 w-64 px-2 focus:ring-indigo-500 bg-gray-200 dark:bg-gray-800"
           placeholder="Search employee..."
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -81,20 +81,56 @@ export default function List() {
         <div className="grid md:grid-cols-3 gap-4">
           {filtered.map((item, index) => {
             // Safe data extraction
-            const name = item?.name || item?.employee_name || "Unknown";
-            const city = item?.city || item?.employee_city || "N/A";
+            const name = item[0] || item?.employee_name || "Unknown";
+            const city = item[2] || item?.employee_city || "N/A";
 
-            return (
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                key={index}
-                onClick={() => navigate(`/details/${index}`, { state: item })}
-                className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow cursor-pointer transition"
-              >
-                <h3 className="font-bold text-lg">{name}</h3>
-                <p className="text-sm text-gray-500">{city}</p>
-              </motion.div>
-            );
+           return (
+  <motion.div
+    whileHover={{ y: -6 }}
+    whileTap={{ scale: 0.98 }}
+    key={index}
+    onClick={() => navigate(`/details/${index}`, { state: item })}
+    className="bg-white dark:bg-gray-900 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden border border-gray-100 dark:border-gray-700"
+  >
+    {/* Top Section */}
+    <div className="flex items-center gap-4 p-4">
+      
+      {/* Mock Profile Image */}
+      <img
+        src={`https://i.pravatar.cc/150?img=${index + 10}`}
+        alt="employee"
+        className="w-16 h-16 rounded-full object-cover border-2 border-indigo-500"
+      />
+
+      {/* Name + Role */}
+      <div>
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
+          {item[0]}
+        </h3>
+        <p className="text-sm text-indigo-500 font-medium">
+          {item[1]}
+        </p>
+      </div>
+    </div>
+
+    {/* Bottom Section */}
+    <div className="px-4 pb-4 space-y-2 text-sm text-gray-600 dark:text-gray-300">
+
+      <div className="flex justify-between">
+        <span> {item[2]}</span>
+        <span> {item[3]}</span>
+      </div>
+
+      <div className="flex justify-between">
+        <span>📅 Joined: {item[4]}</span>
+        <span className="bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-200 px-2 py-1 rounded-full text-xs font-semibold">
+          {item[5]}
+        </span>
+      </div>
+
+    </div>
+  </motion.div>
+);
           })}
         </div>
       )}
