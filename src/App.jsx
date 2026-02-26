@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./pages/login";
+import Login from "./pages/Login";
 import List from "./pages/List";
 import Details from "./pages/Details";
 import PhotoResult from "./pages/PhotoResult";
